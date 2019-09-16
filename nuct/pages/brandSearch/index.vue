@@ -3,6 +3,7 @@
 <div class="container">
     <login></login>
     <!--<navbar></navbar>-->
+    <el-button type="primary" @click="turnOnlySearch" style="position: fixed;right: 300px;z-index: 100;">品牌搜索</el-button>
     <div class="showBrand">
         <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -123,6 +124,9 @@ export default {
                 mallCode: url
             }
         })
+      },
+      turnOnlySearch () {
+          location.href = "../onlySearch";
       }
   }
 }
@@ -133,7 +137,7 @@ export default {
 .showBrand {
     position: relative;
     background: #f5f5f5;
-    margin-top: 50px;
+    //margin-top: 50px;
     height: 1000px;
     padding-top: 30px;
 }

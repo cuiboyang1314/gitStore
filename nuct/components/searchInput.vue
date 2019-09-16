@@ -3,9 +3,9 @@
   <div>
         <el-input class="inputStyle input-with-select" placeholder="请输入内容" v-model="input5">
               <el-select v-model="select" slot="prepend" style="width: 100px;">
-                <el-option label="品牌" value="1"></el-option>
-                <el-option label="资料" value="2"></el-option>
-                <el-option label="话题" value="3"></el-option>
+                <el-option label="品牌" value="品牌"></el-option>
+                <el-option label="资料" value="资料"></el-option>
+                <el-option label="话题" value="话题"></el-option>
               </el-select>
             <el-button slot="append" icon="el-icon-search" style="width: 60px" @click="getBrandList"></el-button>
         </el-input>
@@ -75,7 +75,11 @@ export default {
       this.$store.commit('setList', {
         list: this.$data.list
       });
-      console.log(this.$store.getters.getList[0].name);
+      for(const i in this.$store.getters.getList){
+      console.log(this.$store.getters.getList[i].name);
+      }
+      console.log(this.select);
+      console.log(this.input5);
     },
   },
 }
@@ -88,7 +92,7 @@ export default {
     //border: 1px solid @mainColor;
     width: 500px;
     margin-left: 300px;
-    margin-top: 100px;
+    margin-top: 20px;
 }
 
 .el-input-group__append {

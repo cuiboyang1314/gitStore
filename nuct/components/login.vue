@@ -10,7 +10,7 @@
         <!-- 登录成功显示的个人栏 -->
                 <div class="user" :class="{loginState: loginState}">
                     <el-avatar :size="size" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar>
-                    <i class="el-icon-arrow-down" style="position: relative;top: -5px;"></i>
+                    <el-link :underline="false" style="position: relative;top: -8px;left: 5px;" @click="loginOut">退出</el-link>
                 </div>
         </div>
         <!-- 点击登录弹出的覆盖层登录界面 -->
@@ -82,10 +82,10 @@ export default {
             if (this.form.name == '123' && this.form.psw == '123') {
             Cookies.set('name', this.form.name, {expires: this.toNextDay()});
             Cookies.set('token', '4a10b399f668c23962f54118d0b0a8a1', {expires: this.toNextDay()});
-            this.$router.push('/');
+            this.$router.push('');
 
             setTimeout(() => {
-                window.location.href = window.location.href;
+                window.location.href = '';
             }, 100) 
           } else {
             this.$message.error('账号密码不正确');
@@ -96,9 +96,19 @@ export default {
         toNextDay() {
             return new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(0, 0, 0, 0));
         },
+        loginOut () {
+        console.log(Cookies.get('token'));
+        Cookies.remove('token')
+        setTimeout(() => {
+                window.location.href = '';
+            }, 100);
     },
-    created: function () {
-        if(Cookies.get('token') !== '') {
+    },
+
+    
+
+    mounted: function () {
+        if(Cookies.get('token')) {
             this.loginState = false;
         }
         else {
