@@ -78,8 +78,15 @@ export default {
       for(const i in this.$store.getters.getList){
       console.log(this.$store.getters.getList[i].name);
       }
-      console.log(this.select);
-      console.log(this.input5);
+    this.$router.push({
+        path: '../onlySearch',
+            // name: 'mallList',
+        /*query: {
+            mallCode: 
+        }*/
+    })
+      //console.log(this.select);
+      //console.log(this.input5);
     },
   },
 }

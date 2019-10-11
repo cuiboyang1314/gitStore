@@ -18,7 +18,7 @@
                     <p>回答</p>
                 </div>
                 <p class="questionTime">2019.07.15 20:25来自 qq_17642463</p>
-                <a class="questionTitle">关于使用品牌计算器不能获取结果的问题，求帮助</a>
+                <a class="questionTitle" @click="turnUrl('/brandAnswer')">关于使用品牌计算器不能获取结果的问题，求帮助</a>
                 <p class="questionInf">如图所示，通过品牌计算器得不到正确的返回结果，找了半天都没找到相关办法，求各位大佬</p>
                 <div class="showData">
                     <p>浏览<span>16</span></p>
@@ -33,7 +33,7 @@
                     <p>回答</p>
                 </div>
                 <p class="questionTime">2019.07.15 20:25来自 qq_17642463</p>
-                <a class="questionTitle">关于使用品牌计算器不能获取结果的问题，求帮助</a>
+                <a class="questionTitle" @click="turnUrl('/brandAnswer')">关于使用品牌计算器不能获取结果的问题，求帮助</a>
                 <p class="questionInf">如图所示，通过品牌计算器得不到正确的返回结果，找了半天都没找到相关办法，求各位大佬</p>
                 <div class="showData">
                     <p>浏览<span>16</span></p>
@@ -44,7 +44,7 @@
             </div>
         </div>
         <div class="questionRightBar">
-            <el-button type="primary" style="width: 100%; border-radius: 0px;">我要提问</el-button>
+            <el-button type="primary" @click="turnUrl('/askQuestion')" style="width: 100%; border-radius: 0px;">我要提问</el-button>
             <div class="myAnswer">
                 <p class="questionRightTitle">我的回答</p>
                 <hr>
@@ -99,7 +99,7 @@ export default {
         activeIndex: '1',
         input: '',
         tabsVisibility: {
-            questionList: 'hidden',
+            questionList: '',
         },
     };
   },
@@ -110,6 +110,10 @@ export default {
               this.$data.tabsVisibility[vib] = 'hidden';
           }
           this.$data.tabsVisibility[xx] = '';
+      },
+
+      turnUrl(url) {
+          location.href = url;
       }
   }
 }
@@ -171,7 +175,7 @@ export default {
 .questionTitle {
     color: #333333;
     font-size: 20px;
-    
+    cursor: pointer;
 }
 
 .questionInf {

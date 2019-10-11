@@ -16,7 +16,12 @@ module.exports = {
   /*
   ** Customize the progress bar color
   */
-  css: ['element-ui/lib/theme-chalk/index.css'],
+  css: [
+    'element-ui/lib/theme-chalk/index.css',
+    'quill/dist/quill.snow.css',
+    'quill/dist/quill.bubble.css',
+    'quill/dist/quill.core.css'
+  ],
 
   loading: { color: '#3B8070' },
   /*
@@ -24,6 +29,8 @@ module.exports = {
   */
   plugins: [
         { src: '~/plugins/element-ui', ssr: true },
+        { src: '~/plugins/axios', ssr: true },
+        { src: '~/plugins/nuxt-quill-plugin.js', ssr: false },
 	  ],
 
 	  babel: {
@@ -40,14 +47,39 @@ module.exports = {
         ],
         comments: true
     },
-  
+
+  modules: ['@nuxtjs/axios', '@nuxtjs/proxy'],
+  axios: {
+    proxy: true
+  },
+  proxy: {
+      '/api' : 'http://47.104.148.196:8081'
+  },
+
+  /*devServer: {
+    proxy: {
+      "/api": {
+        target: "http://47.104.148.196:8081",   // 要请求的后台地址
+        //ws: true,    // 启用websockets
+        changeOrigin: true,    // 是否跨域
+        pathRewrite: {   
+          "^/api": "/"          // 这里理解成用‘/api’代替target里面的地址，后面组件中我们掉接口时直接用api代替
+        },
+        headers: {
+          referer: "http://47.104.148.196:8081"
+        }
+      }
+    }
+  },*/
+
 
   build: {
     /*
     ** Run ESLint on save
     */
-	/*vendor: ['axios'],
-    extend (config, { isDev, isClient }) {
+  vendor: ['axios'],
+  //vendor: ['wangeditor'],
+    /*extend (config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({
           enforce: 'pre',
@@ -57,6 +89,6 @@ module.exports = {
         })
       }
     }*/
-  }
+  },
 }
 

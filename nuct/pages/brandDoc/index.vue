@@ -1,0 +1,255 @@
+<!-- 品牌资料 -->
+<template>
+    <div class="container">
+    <login></login>
+    <navbar></navbar>
+    <div class="brandConnect">
+        <div class="brandCondition">
+            分类：<span>全部</span><span @click="tran">工业品牌</span><span @click="tran">食品品牌</span>
+            <hr>
+            领域：<span>全部</span><span @click="tran">领域1</span><span @click="tran">领域2</span><span @click="tran">领域3</span>
+            <hr>
+        <div>
+            关键词搜索：
+            <el-input placeholder="请输入内容" v-model="input3" class="input-with-select" style="width: 500px;">
+                <el-button slot="append" icon="el-icon-search"></el-button>
+            </el-input>
+        </div>
+        </div>
+        <div>
+            <div style="margin-bottom: 10px;">
+            已选条件: 
+            <el-tag v-for="tag in brandCondition" :key="tag" closable :disable-transitions="true" @close="tagClose(tag)" :style="{display: show}">
+                {{ tag }}
+            </el-tag>
+            </div>
+            <div class="left">
+            <div>
+                <a class="questionTitle" @click="turnInfor">刷机教程.doc——三星GT-I9070线刷教程</a>
+                <p class="questionInf">想要刷机但是没有尝试过刷机的三星小伙伴们可以参考一下本教程。</p>
+                <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>2019-07-15</span>上传者：<span>Mr.Boring</span></p>
+                <hr>
+            </div>
+            </div>
+            <div class="right">
+                <div class="myAnswer">
+                    <div class="userPic">
+                        <div class="selfPic"></div>
+                        <div>
+                            <p style="color: #3399ff;font-size: 18px;">用户</p>
+                            <p style="color: #666;font-size:18px;">积分：<span style="color: red">10</span></p>
+                        </div>
+                    </div>
+                    <p>上传了<span>0</span>个资源</p>
+                    <p>下载了<span>0</span>个资源</p>
+                    <el-button type="primary" style="width: 100%;margin-top: 20px;" @click="turnUrl">上传资源</el-button>
+                </div>
+                <el-card class="box-card" shadow="never">
+                    <div slot="header" class="clearfix">
+                        <span>热门标签</span>
+                        <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+                    </div>
+                    <div></div>
+                </el-card>
+            </div>
+        </div>
+
+    </div>
+    <footerBar></footerBar>
+    </div>
+</template>
+
+<script>
+import login from '~/components/login';
+import navbar from '~/components/nav';
+import footerBar from '~/components/footer';
+export default {
+    components: {
+        login,
+        navbar,
+        footerBar,
+    },
+
+  data () {
+    return {
+        brandCondition: [],
+        show: 'none',
+        input3: '',
+    };
+  },
+
+  methods: {
+      tran (e) {
+          this.brandCondition.push(e.target.innerText);
+      },
+
+      tagClose (tag) {
+          this.brandCondition.splice(this.brandCondition.indexOf(tag), 1);
+      },
+
+      turnUrl () {
+          location.href = "/uploadDoc";
+      },
+
+      turnInfor () {
+            this.$router.push({
+            path: '../docInfor',
+            // name: 'mallList',
+            /*query: {
+                mallCode: url
+            }*/
+        })
+      }
+  },
+
+  updated: function () {
+      if(this.brandCondition !== ''){
+          this.show = 'inline-block';
+      }else{
+          this.show = 'none';
+      }
+  }
+}
+
+</script>
+<style lang='less'>
+@import '~assets/less/main.less';
+.container {
+    position: relative;
+}
+
+.brandConnect {
+    overflow: hidden;
+    background: #f5f5f5;
+    min-height: 500px;
+    margin-top: 50px;
+    padding: 0 40px;
+}
+
+hr {
+    margin: 10px auto;
+}
+
+.brandCondition {
+    background: #fff;
+    width: 1000px;
+    min-height: 100px;
+    margin: 20px auto;
+    padding: 10px;
+}
+
+.brandCondition span {
+    margin: 0px 10px;
+    cursor: pointer;
+}
+
+.brandCondition span:hover {
+    color: #409EFF;
+}
+
+.showCondition {
+    display: inline-block;
+    border: 1px solid #409EFF;
+}
+
+.left {
+    float: left;
+    width: 700px;
+    height: 800px;
+    background: #fff;
+}
+
+.right {
+    float: right;
+    width: 280px;
+    height: 800px;
+    background: #fff;
+}
+
+.userPic {
+    display: flex;
+}
+
+.userPic div {
+    //border: 1px solid #000;
+    height: 70px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.userPic div:nth-child(2) {
+    flex: 1;
+}
+
+.userPic div:nth-child(2) p {
+    line-height: 35px;
+}
+
+.selfPic {
+    width: 70px;
+    height: 70px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.myAnswer p {
+    color: #333;
+}
+
+.myAnswer p:nth-last-child(1),
+.myAnswer p:nth-last-child(2),
+.myAnswer p:nth-last-child(3) {
+    line-height: 35px;
+    margin-left: 10px;
+}
+
+.myAnswer p:nth-last-child(1) span,
+.myAnswer p:nth-last-child(2) span,
+.myAnswer p:nth-last-child(3) span {
+    color: #3399ff;
+}
+
+  .text {
+    font-size: 14px;
+  }
+
+  .item {
+    margin-bottom: 18px;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
+
+.questionTime {
+    color: #6a6f6f;
+    margin-bottom: 10px;
+}
+
+.questionTitle {
+    color: #333333;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.questionInf {
+    width: 80%;
+    color: #6a6f6f;
+    margin-top: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-bottom: 20px;
+}
+
+.questionTime span {
+    margin: 0 30px 0 0;
+}
+</style>

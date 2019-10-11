@@ -12,7 +12,7 @@
         <div class="brandBanner">
             <div>品牌计算</div>
             <div @click="jumpUrl('/brandSearch')">品牌查询</div>
-            <div>品牌资料</div>
+            <div @click="jumpUrl('/brandDoc')">品牌资料</div>
             <div @click="jumpUrl('/brandConnect')">品牌交流</div>
         </div>
         <div class="wx">

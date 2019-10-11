@@ -13,11 +13,58 @@
         <el-input class="questionSearch" v-model="input" placeholder="问题搜索"></el-input>
         <div class="questionList" :style="{ visibility: tabsVisibility.questionList }">
             <div>
+                <div class="question">
+                    <h1>关于使用品牌计算器不能获取结果的问题，求帮助</h1>
+                    <div class="questionContent">ssd</div>
+                    <br>
+                    <p class="time">编辑于：<span>2019.07.15 20:43</span></p>
+                    <br>
+                    <p>浏览<span style="margin-right: 10px">0</span>评论<span>0</span></p>
+                    <div  style="overflow: hidden;position: relative;">
+                        <div class="questionNav">
+                            <el-link :underline="false">分享</el-link>
+                            <el-link :underline="false">收藏</el-link>
+                        </div>
+                        <div style="float: right">
+                            <div class="head"></div>
+                            <div class="name">崔博洋cuiboyang</div>
+                        </div>
+                    </div>
+                </div>
+                <hr style="border: 0;border-bottom: 2px solid #ccc;">
+                <div>
+                    <p style="font-size: 17px;"><span>0</span>个回答</p>
+                    <hr style="border: 0;border-bottom: 1px solid #ccc;">
+                    <!--循环此部分-->
+                    <div class="question">
+                        <div class="questionContent">ssd</div>
+                        <br>
+                        <div  style="overflow: hidden;position: relative;">
+                            <div class="questionNav">
+                                <p class="time">编辑于：<span>2019.07.15 20:43</span></p>
+                            </div>
+                            <div style="float: right">
+                                <div class="head"></div>
+                                <div class="name">崔博洋cuiboyang</div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="border: 0;border-bottom: 1px solid #ccc;">
 
+                </div>
+                <div class="quill-editor"
+                    v-quill:myQuillEditor="editorOption"
+                    @focus="onEditorFocus($event)"
+                    @blur="onEditorBlur($event)"
+                    @change="onEditorChange($event)"
+                    style="height: 300px;">
+                </div>
+                <el-button type="primary">提交</el-button>
+                <!--<Eidtor></Eidtor>-->
             </div>
         </div>
         <div class="questionRightBar">
-            <el-button type="primary" style="width: 100%; border-radius: 0px;">我要提问</el-button>
+            <el-button type="primary"  @click="turnUrl('/askQuestion')" style="width: 100%; border-radius: 0px;">我要提问</el-button>
             <div class="myAnswer">
                 <p class="questionRightTitle">我的回答</p>
                 <hr>
@@ -49,11 +96,13 @@
 import login from '~/components/login';
 import navbar from '~/components/nav';
 import footerBar from '~/components/footer';
+//import Editor from '~/components/wangeidtor';
 export default {
     components: {
         login,
         navbar,
         footerBar,
+        //Editor,
     },
 
   data () {
@@ -61,8 +110,24 @@ export default {
         activeIndex: '1',
         input: '',
         tabsVisibility: {
-            questionList: 'hidden',
+            questionList: '',
         },
+        editorOption: {
+          // 富文本中的一些属性
+          modules: {
+            toolbar: [
+                [{'size': ['small', false, 'large']}],
+                [{ 'font': [] }],     //字体
+                [{ 'color': [] }, { 'background': [] }],
+                ['bold', 'italic'],
+                [{'list': 'ordered'}, {'list': 'bullet'}],
+                ['link', 'image'],
+                ['blockquote'],
+                [{ 'align': [] }],    //对齐方式
+
+            ]
+          }
+        }
     };
   },
 
@@ -72,6 +137,16 @@ export default {
               this.$data.tabsVisibility[vib] = 'hidden';
           }
           this.$data.tabsVisibility[xx] = '';
+      },
+        onEditorReady (editor) {},
+        // 富文本编辑器 失去焦点事件
+        onEditorBlur (editor) {},
+        // 富文本编辑器 获得焦点事件
+        onEditorFocus (editor) {},
+        // 富文本编辑器 内容改变事件
+        onEditorChange (editor) {},
+        turnUrl(url) {
+          location.href = url;
       }
   }
 }
@@ -286,5 +361,31 @@ export default {
 
 hr {
     margin-bottom: 20px;
+}
+
+.question h1 {
+    text-align: center;
+    font-size: 20px;
+}
+
+.time {
+    color: #ccc;
+}
+
+.head {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+.name {
+    margin-bottom: 10px;
+}
+
+.questionNav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
 }
 </style>

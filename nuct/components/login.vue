@@ -36,6 +36,9 @@
 
 <script>
 import Cookies from '~/plugins/cookie';
+import axios from 'axios';
+import qs from 'qs';
+//import {http, qs} from '../plugins/axios';
 
 export default {
     name: 'login',
@@ -78,7 +81,7 @@ export default {
         },
 
         loginFormIn () {
-            console.log(Cookies.get('token'));
+            /*console.log(Cookies.get('token'));
             if (this.form.name == '123' && this.form.psw == '123') {
             Cookies.set('name', this.form.name, {expires: this.toNextDay()});
             Cookies.set('token', '4a10b399f668c23962f54118d0b0a8a1', {expires: this.toNextDay()});
@@ -90,7 +93,27 @@ export default {
           } else {
             this.$message.error('账号密码不正确');
           }
-          console.log(Cookies.get('token'));
+          console.log(Cookies.get('token'));*/
+          console.log(this.form.name);
+          console.log(this.form.psw);
+          console.log(typeof this.form.name);
+          console.log(typeof this.form.psw);
+            axios.post('/dbblog/portal/user/login',{
+                    "username": this.form.name,
+                    "password": this.form.psw,
+            }).then(res => {
+                //console.log(res.data.token);
+                Cookies.set('name', this.form.name, {expires: this.toNextDay()});
+                Cookies.set('token', res.data.token, {expires: this.toNextDay()});
+                //console.log(Cookies.get('token'));
+                this.$router.push('');
+                setTimeout(() => {
+                window.location.href = '';
+            }, 100)
+            }).catch(error => {
+                console.log(error);
+            });
+            //console.log(Cookies.get('token'));
         },
 
         toNextDay() {

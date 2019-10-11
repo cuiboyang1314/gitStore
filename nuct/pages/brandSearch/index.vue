@@ -2,8 +2,9 @@
 <template>
 <div class="container">
     <login></login>
+    <search></search>
     <!--<navbar></navbar>-->
-    <el-button type="primary" @click="turnOnlySearch" style="position: fixed;right: 300px;z-index: 100;">品牌搜索</el-button>
+    <!--<el-button type="primary" @click="turnOnlySearch" style="position: fixed;right: 300px;z-index: 100;">品牌搜索</el-button>-->
     <div class="showBrand">
         <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -37,8 +38,9 @@ import footerBar from '~/components/footer';
 import navbar from '~/components/nav';
 import search from '~/components/searchInput';
 import axios from 'axios';
+import Cookies from '~/plugins/cookie';
 
-axios.defaults.baseURL = "http://47.104.148.196:8081/dbblog";
+//axios.defaults.baseURL = "http://47.104.148.196:8081/dbblog";
 
 export default {
   data () {
@@ -104,11 +106,24 @@ export default {
       search,
   },
   mounted() {
-      axios.get('/brands/search',{
-          params: {
-              keywords: 'http',
-          }
-      }).then(res => {
+      console.log(Cookies.get('token'));
+      const instance = axios.create({
+        withCredentials: true,
+        headers: {
+            'token': Cookies.get('token'),
+        },
+        /*proxy: {
+            "/api": {
+                target: "http://47.104.148.196:8081",
+                ws: true,
+                changeOrigin: true,
+                pathRewrite: {
+                    "^/api": "/"
+                }
+            }
+        }*/
+    });
+      instance.get('dbblog/portal/brand/brands').then(res => {
           console.log(res.data);
       }).catch(error => {
         console.log(error);
@@ -137,7 +152,7 @@ export default {
 .showBrand {
     position: relative;
     background: #f5f5f5;
-    //margin-top: 50px;
+    margin-top: 30px;
     height: 1000px;
     padding-top: 30px;
 }
