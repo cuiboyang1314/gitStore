@@ -1,8 +1,12 @@
 <!-- 上传资料 -->
 <template>
   <div class="container">
-      <login></login>
-      <!--<navbar></navbar>-->
+    <div class="searchBanner">
+        <navbar style="top: 0;"></navbar>
+        <login></login>
+    </div>
+    <img src="../../static/img/791571927556_.pic.jpg" alt="">
+    <search></search>
       <div class="upload">
         <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -22,7 +26,7 @@
                     style="height: 300px; margin-bottom: 10px;">
                 </div>
                 <div>
-                    <p>我的积分：<span style="color: #409EFF">50</span></p>
+                    <p>我的积分：<span style="color: #ef8b3b">50</span></p>
                     悬赏积分：
                     <el-input-number v-model="num" size="mini" controls-position="right" :min="1" :max="max"></el-input-number>
                 </div>
@@ -40,6 +44,9 @@
 import login from '~/components/login';
 import navbar from '~/components/nav';
 import footerBar from '~/components/footer';
+import search from '~/components/searchInput';
+import axios from 'axios';
+import Cookies from '~/plugins/cookie';
 export default {
   data () {
     return {
@@ -71,6 +78,7 @@ export default {
       login,
       navbar,
       footerBar,
+      search,
   },
 
   methods: {
@@ -83,9 +91,10 @@ export default {
 .upload {
     min-height: 500px;
     //margin-top: 100px;
-    background: #f5f5f5;
+    //background: #f5f5f5;
     padding-top: 20px;
     overflow: hidden;
+    box-shadow: 0px 2px 10px 4px #ccc;
 }
 
 .Breadcrumb {
@@ -108,5 +117,14 @@ export default {
 .el-textarea .el-textarea__inner{ // 然后找到对应的类名，在这里将拉伸去掉即可
     height: 150px;
     resize: none;
+}
+
+.searchBanner {
+    background: #6b2049;
+    height: 35px;
+}
+
+.login {
+    bottom: 30px !important;
 }
 </style>

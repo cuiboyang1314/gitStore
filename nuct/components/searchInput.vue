@@ -2,7 +2,7 @@
 <template>
   <div>
         <el-input class="inputStyle input-with-select" placeholder="请输入内容" v-model="input5">
-              <el-select v-model="select" slot="prepend" style="width: 100px;">
+              <el-select v-model="select" slot="prepend" style="width: 80px;">
                 <el-option label="品牌" value="品牌"></el-option>
                 <el-option label="资料" value="资料"></el-option>
                 <el-option label="话题" value="话题"></el-option>
@@ -92,14 +92,16 @@ export default {
 }
 
 </script>
-<style lang='less' scoped>
+<style lang='less'>
 @import '~assets/less/main.less';
 @mainColor: #3399ff;
 .inputStyle {
     //border: 1px solid @mainColor;
-    width: 500px;
-    margin-left: 300px;
-    margin-top: 20px;
+    width: 300px;
+    position: absolute;
+    z-index: 99;
+    top: 65px;
+    right: 100px;
 }
 
 .el-input-group__append {
@@ -108,5 +110,15 @@ export default {
 
 .el-icon-search:before {
     color: #fff;
+}
+
+.el-input-group__append, .el-input-group__prepend {
+    padding: 0 10px;
+}
+
+.el-input-group__append {
+    background: #6b2049;
+    border-radius: 0 30px 30px 0;
+    border: 0;
 }
 </style>

@@ -17,7 +17,7 @@
         <div class="loginInbg" :class="{hide: hideDiv}">
             <el-form ref="form" status-icon :label-position="labelPosition" :model="form" label-width="80px" class="loginForm">
                 <div class="loginFormTitle">
-                    <span>登录</span>
+                    <span>登陆</span>
                     <i class="el-icon-close iconClose" @click="closeForm"></i>
                 </div>
                 <el-form-item label="用户名">
@@ -26,7 +26,7 @@
                 <el-form-item label="密码">
                     <el-input v-model="form.psw" show-password style="width: 250px;"></el-input>
                 </el-form-item>
-                <el-button type="primary" style="margin-left: 100px;" @click="loginFormIn">登录</el-button>
+                <el-button type="primary" style="margin-left: 160px;background: #ef8b3b; border: 1px solid #ef8b3b;" @click="loginFormIn">登陆</el-button>
             </el-form>
         </div>
 
@@ -60,7 +60,7 @@ export default {
     props: {
         loginIn: {
             type: String,
-            default: '登录'
+            default: '登陆'
         },
         register: {
             type: String,
@@ -141,30 +141,43 @@ export default {
 }
 
 </script>
-<style lang='less' scoped>
+<style lang='less'>
+@mainColor: #6b2049;
 .loginDiv {
-    height: 35px;
+    height: 60px;
+    width: 1080px;
     overflow: hidden;
-    background: #f4f9ff;
+    //background: #6b2048;
+    position: absolute;
+    //top: 35px;
 }
 
+a {
+    color: #fff;
+}
+
+
 .login {
-    float: right;
-    line-height: 35px;
+    //background: #6b2048;
+    position: absolute;
+    line-height: 25px;
+    right: 0;
+    bottom: 0;
+    z-index: 99;
 }
 
 .login a {
     text-align: center;
     width: 65px;
     float: left;
-    line-height: 30px;
+    line-height: 25px;
     padding: 0 5px;
 }
 
 .login a:hover {
-    background: #2dc6ff;
+    background: #ef8b3b;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 55px;
 }
 
 .login a:nth-child(2) {
@@ -199,7 +212,7 @@ export default {
 .loginFormTitle {
     width: 100%;
     line-height: 30px;
-    background: #909399;
+    background: @mainColor;
     text-align: center;
     color: #fff;
     margin-bottom: 30px;
@@ -218,5 +231,9 @@ export default {
 
 .loginState {
     display: none;
+}
+
+.el-form-item__label {
+    color: @mainColor;
 }
 </style>

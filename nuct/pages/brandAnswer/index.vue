@@ -1,8 +1,12 @@
 <!-- 品牌回答 -->
 <template>
     <div class="container">
-    <login></login>
-    <navbar></navbar>
+    <div class="searchBanner">
+        <navbar style="top: 0;"></navbar>
+        <login></login>
+    </div>
+    <img src="../../static/img/791571927556_.pic.jpg" alt="">
+    <search></search>
     <div class="brandConnect">
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" style="padding-left: 30px;">
             <el-menu-item index="1" @click="tabs('questionList')">问题首页</el-menu-item>
@@ -10,7 +14,7 @@
             <el-menu-item index="3">已解决</el-menu-item>
             <el-menu-item index="4">未解决</el-menu-item>
         </el-menu>
-        <el-input class="questionSearch" v-model="input" placeholder="问题搜索"></el-input>
+        <!-- <el-input class="questionSearch" v-model="input" placeholder="问题搜索"></!-->
         <div class="questionList" :style="{ visibility: tabsVisibility.questionList }">
             <div>
                 <div class="question">
@@ -64,7 +68,7 @@
             </div>
         </div>
         <div class="questionRightBar">
-            <el-button type="primary"  @click="turnUrl('/askQuestion')" style="width: 100%; border-radius: 0px;">我要提问</el-button>
+            <el-button type="primary"  @click="turnUrl('/askQuestion')" style="width: 100%; border-radius: 0px; background: #6b2049; border: 1px solid #6b2049;">我要提问</el-button>
             <div class="myAnswer">
                 <p class="questionRightTitle">我的回答</p>
                 <hr>
@@ -96,12 +100,16 @@
 import login from '~/components/login';
 import navbar from '~/components/nav';
 import footerBar from '~/components/footer';
+import search from '~/components/searchInput';
+import axios from 'axios';
+import Cookies from '~/plugins/cookie';
 //import Editor from '~/components/wangeidtor';
 export default {
     components: {
         login,
         navbar,
         footerBar,
+        search,
         //Editor,
     },
 
@@ -160,9 +168,10 @@ export default {
 
 .brandConnect {
     overflow: hidden;
-    background: #f5f5f5;
+    //background: #f5f5f5;
     min-height: 500px;
-    margin-top: 100px;
+    //margin-top: 100px;
+    box-shadow: 0px 2px 10px 4px #ccc;
 }
 
 .brandNav {
@@ -197,7 +206,7 @@ export default {
     min-height: 300px;
     width: 300px;
     float: right;
-    background: #f5f5f5;
+    //background: #f5f5f5;
 }
 
 .questionTime {
@@ -387,5 +396,14 @@ hr {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+}
+
+.searchBanner {
+    background: #6b2049;
+    height: 35px;
+}
+
+.login {
+    bottom: 30px !important;
 }
 </style>

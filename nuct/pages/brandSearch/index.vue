@@ -1,8 +1,16 @@
 <!--  -->
 <template>
 <div class="container">
-    <login></login>
+    <div class="searchBanner">
+        <navbar style="top: 0;"></navbar>
+        <login></login>
+    </div>
+    <img src="../../static/img/791571927556_.pic.jpg" alt="">
     <search></search>
+    <!-- <div class="navFixed">
+        <login></login>
+        <search></search>
+    </div> -->
     <!--<navbar></navbar>-->
     <!--<el-button type="primary" @click="turnOnlySearch" style="position: fixed;right: 300px;z-index: 100;">品牌搜索</el-button>-->
     <div class="showBrand">
@@ -11,11 +19,12 @@
             <el-breadcrumb-item>品牌列表</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="condition">
-            <p style="margin-left: 15px; margin-bottom: 20px;">筛选条件：</p>
+            <p style="margin-left: 15px; margin-bottom: 20px;"><span style="display: inline-block; width: 9px; height: 15px; background: #6b2049; margin-right: 5px;margin-top: -6px;vertical-align: middle;"></span>筛选条件：</p>
             <div v-for = "(item, i) in factor" :key="i">
                 <a href="" class="conditionP">{{ item }}</a>
             </div>
         </div>
+        <hr>
         <div class="brand">
             <div v-for = "(item, i) in list" :key="i" v-if = "i < 9" @click="turnDetails(item.name)"> 
                 <p class="brandTitle">{{ item.name }}</p>
@@ -151,8 +160,7 @@ export default {
 @import '~assets/less/main.less';
 .showBrand {
     position: relative;
-    background: #f5f5f5;
-    margin-top: 30px;
+    //margin-top: 30px;
     height: 1000px;
     padding-top: 30px;
 }
@@ -163,10 +171,10 @@ export default {
 }
 
 .condition {
-    background: #fff;
     height: 100px;
     width: 980px;
     margin: 0 auto;
+
 }
 
 .brand {
@@ -183,6 +191,7 @@ export default {
     height: 200px;
     background: #fff;
     overflow: hidden;
+    box-shadow: 4px 4px 10px #ccc;
 }
 
 .el-pagination {
@@ -206,5 +215,27 @@ export default {
 .conditionP {
     float: left;
     margin-left: 35px;
+}
+
+.navFixed {
+    width: 1080px;
+    height: 100px;
+    background: #fff;
+    position: fixed;
+    z-index: 3;
+    top: 0;
+}
+
+.container {
+    //padding-top: 100px;
+}
+
+.searchBanner {
+    background: #6b2049;
+    height: 35px;
+}
+
+.login {
+    bottom: 30px !important;
 }
 </style>

@@ -1,7 +1,12 @@
 <!--  -->
 <template>
 <div class="container">
-    <login></login>
+    <div class="searchBanner">
+        <navbar style="top: 0;"></navbar>
+        <login></login>
+    </div>
+    <img src="../../static/img/791571927556_.pic.jpg" alt="">
+    <search></search>
     <div class="showBrand">
         <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -166,7 +171,7 @@ export default {
 }
 
 </script>
-<style lang='less' scoped>
+<style lang='less'>
 @import '~assets/less/main.less';
 
 h6 {
@@ -203,5 +208,14 @@ h6 {
     top: 50%;
     transform: translateY(10%);
     margin-right: 100px;
+}
+
+.searchBanner {
+    background: #6b2049;
+    height: 35px;
+}
+
+.login {
+    bottom: 30px !important;
 }
 </style>

@@ -3,8 +3,8 @@
       <ul class="nav">
           <li><a href="/">网站首页</a></li>
           <li><a href="/about">关于我们</a></li>
-          <li>服务介绍</li>
-          <li>联系我们</li>
+          <li><a>服务介绍</a></li>
+          <li><a>联系我们</a></li>
       </ul>
 </template>
 
@@ -20,11 +20,16 @@ export default {
 </script>
 <style lang='less' scoped>
 @import '~assets/less/main.less';
+    a,
+    p,
+    span {
+        color: #fff;
+    }
 
     .nav {
         position: absolute;
-        top: 50px;
-        right: 450px;
+        top: 83px;
+        right: 185px;
         height: 40px;
         z-index: 1;
         width: 600px;
@@ -41,6 +46,7 @@ export default {
     }
 
     .nav li:hover {
-        background: #2dc6ff;
+        background: #ef8b3b;
+        border-radius: 55px;
     }
 </style>

@@ -1,25 +1,37 @@
-<!-- 品牌资料 -->
+<!--  -->
 <template>
-    <div class="container">
-    <login></login>
-    <navbar></navbar>
+<div class="container">
+    <div class="searchBanner">
+        <navbar style="top: 0;"></navbar>
+        <login></login>
+    </div>
+    <img src="../../static/img/791571927556_.pic.jpg" alt="">
+    <search></search>
     <div class="brandConnect">
         <div class="brandCondition">
-            分类：<span>全部</span><span @click="tran">工业品牌</span><span @click="tran">食品品牌</span>
-            <hr>
-            领域：<span>全部</span><span @click="tran">领域1</span><span @click="tran">领域2</span><span @click="tran">领域3</span>
-            <hr>
-        <div>
-            关键词搜索：
-            <el-input placeholder="请输入内容" v-model="input3" class="input-with-select" style="width: 500px;">
-                <el-button slot="append" icon="el-icon-search"></el-button>
-            </el-input>
+            <div style="margin-bottom: 10px;">
+                <span style="display: inline-block; width: 9px; height: 15px; background: #6b2049; margin-right: 5px;margin-top: -6px;vertical-align: middle;"></span>
+                分类：<span>全部</span><span @click="tran">工业品牌</span><span @click="tran">食品品牌</span>
+            </div>
+            <div style="margin-bottom: 10px;">
+                <span style="display: inline-block; width: 9px; height: 15px; background: #6b2049; margin-right: 5px;margin-top: -6px;vertical-align: middle;"></span>
+                领域：<span>全部</span><span @click="tran">领域1</span><span @click="tran">领域2</span><span @click="tran">领域3</span>
+            </div>
+            <div>
+                <span style="display: inline-block; width: 9px; height: 15px; background: #6b2049; margin-right: 5px;margin-top: -6px;vertical-align: middle;"></span>
+                关键词搜索：
+                <el-input placeholder="请输入内容" v-model="input3" class="input-with-select" style="width: 500px;">
+                    <el-button slot="append" icon="el-icon-search"></el-button>
+                </el-input>
+            </div>
         </div>
-        </div>
+        <hr>
         <div>
             <div style="margin-bottom: 10px;">
             已选条件: 
-            <el-tag v-for="tag in brandCondition" :key="tag" closable :disable-transitions="true" @close="tagClose(tag)" :style="{display: show}">
+            <el-tag v-for="tag in brandCondition" :key="tag" closable :disable-transitions="true" @close="tagClose(tag)" 
+
+:style="{display: show}">
                 {{ tag }}
             </el-tag>
             </div>
@@ -27,7 +39,9 @@
             <div>
                 <a class="questionTitle" @click="turnInfor">刷机教程.doc——三星GT-I9070线刷教程</a>
                 <p class="questionInf">想要刷机但是没有尝试过刷机的三星小伙伴们可以参考一下本教程。</p>
-                <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>2019-07-15</span>上传者：<span>Mr.Boring</span></p>
+                <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>2019-07-15</span>上传者：
+
+<span>Mr.Boring</span></p>
                 <hr>
             </div>
             </div>
@@ -53,45 +67,53 @@
                 </el-card>
             </div>
         </div>
-
     </div>
     <footerBar></footerBar>
-    </div>
+</div>
 </template>
 
 <script>
 import login from '~/components/login';
-import navbar from '~/components/nav';
 import footerBar from '~/components/footer';
-export default {
-    components: {
-        login,
-        navbar,
-        footerBar,
-    },
+import navbar from '~/components/nav';
+import search from '~/components/searchInput';
+import axios from 'axios';
+import Cookies from '~/plugins/cookie';
 
+//axios.defaults.baseURL = "http://47.104.148.196:8081/dbblog";
+
+export default {
   data () {
     return {
+        input: '',
         brandCondition: [],
         show: 'none',
-        input3: '',
+        input3: '',    
     };
+  },
+  components: {
+      login,
+      footerBar,
+      navbar,
+      search,
+  },
+  mounted() {
   },
 
   methods: {
-      tran (e) {
+    tran (e) {
           this.brandCondition.push(e.target.innerText);
       },
 
-      tagClose (tag) {
+    tagClose (tag) {
           this.brandCondition.splice(this.brandCondition.indexOf(tag), 1);
       },
 
-      turnUrl () {
+    turnUrl () {
           location.href = "/uploadDoc";
       },
 
-      turnInfor () {
+    turnInfor () {
             this.$router.push({
             path: '../docInfor',
             // name: 'mallList',
@@ -100,9 +122,10 @@ export default {
             }*/
         })
       }
+
   },
 
-  updated: function () {
+    updated: function () {
       if(this.brandCondition !== ''){
           this.show = 'inline-block';
       }else{
@@ -114,16 +137,17 @@ export default {
 </script>
 <style lang='less'>
 @import '~assets/less/main.less';
+
 .container {
     position: relative;
 }
 
 .brandConnect {
     overflow: hidden;
-    background: #f5f5f5;
+    //background: #f5f5f5;
     min-height: 500px;
-    margin-top: 50px;
     padding: 0 40px;
+    padding-bottom: 20px;
 }
 
 hr {
@@ -150,6 +174,11 @@ hr {
 .showCondition {
     display: inline-block;
     border: 1px solid #409EFF;
+}
+
+.left,
+.right {
+    box-shadow: 4px 4px 10px 4px #ccc;
 }
 
 .left {
@@ -251,5 +280,14 @@ hr {
 
 .questionTime span {
     margin: 0 30px 0 0;
+}
+
+.searchBanner {
+    background: #6b2049;
+    height: 35px;
+}
+
+.login {
+    bottom: 30px !important;
 }
 </style>

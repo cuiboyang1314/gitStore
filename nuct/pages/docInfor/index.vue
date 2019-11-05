@@ -1,8 +1,12 @@
 <!-- 资料详情 -->
 <template>
     <div class="container">
-    <login></login>
-    <navbar></navbar>
+    <div class="searchBanner">
+        <navbar style="top: 0;"></navbar>
+        <login></login>
+    </div>
+    <img src="../../static/img/791571927556_.pic.jpg" alt="">
+    <search></search>
     <div class="brandConnect">
         <div>
             <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
@@ -62,11 +66,15 @@
 import login from '~/components/login';
 import navbar from '~/components/nav';
 import footerBar from '~/components/footer';
+import search from '~/components/searchInput';
+import axios from 'axios';
+import Cookies from '~/plugins/cookie';
 export default {
     components: {
         login,
         navbar,
         footerBar,
+        search,
     },
 
   data () {
@@ -116,7 +124,7 @@ export default {
 
 .brandConnect {
     overflow: hidden;
-    background: #f5f5f5;
+    //background: #f5f5f5;
     min-height: 500px;
     margin-top: 50px;
     padding: 20px 40px;
@@ -148,6 +156,11 @@ hr {
     display: inline-block;
     border: 1px solid #409EFF;
     
+}
+
+.left,
+.right {
+    box-shadow: 4px 4px 10px 4px #ccc;
 }
 
 .left {
@@ -264,5 +277,14 @@ hr {
     top: 50%;
     right: 100px;
     transform: translateY(-50%);
+}
+
+.searchBanner {
+    background: #6b2049;
+    height: 35px;
+}
+
+.login {
+    bottom: 30px !important;
 }
 </style>
