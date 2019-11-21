@@ -2,6 +2,8 @@ module.exports = {
   /*
   ** Headers of the page
   */
+  //loading: '~components/loading.vue',
+
   head: {
     title: 'nuct',
     meta: [
@@ -29,7 +31,7 @@ module.exports = {
   */
   plugins: [
         { src: '~/plugins/element-ui', ssr: true },
-        { src: '~/plugins/axios', ssr: true },
+        { src: '~/plugins/axios', ssr: false },
         { src: '~/plugins/nuxt-quill-plugin.js', ssr: false },
 	  ],
 

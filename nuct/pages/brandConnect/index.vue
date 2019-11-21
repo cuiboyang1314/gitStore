@@ -95,6 +95,7 @@ import search from '~/components/searchInput';
 import axios from 'axios';
 import Cookies from '~/plugins/cookie';
 export default {
+      middleware: 'auth',
     components: {
         login,
         navbar,

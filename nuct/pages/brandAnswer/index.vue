@@ -105,6 +105,7 @@ import axios from 'axios';
 import Cookies from '~/plugins/cookie';
 //import Editor from '~/components/wangeidtor';
 export default {
+      middleware: 'auth',
     components: {
         login,
         navbar,

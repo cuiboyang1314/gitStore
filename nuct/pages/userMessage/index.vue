@@ -18,6 +18,7 @@ import login from '~/components/login';
 import navbar from '~/components/nav';
 import footerBar from '~/components/footer';
 export default {
+    middleware: 'auth',
   data () {
     return {
     };

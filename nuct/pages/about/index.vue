@@ -25,6 +25,7 @@ import navbar from '~/components/nav';
 import footerBar from '~/components/footer';
 import logo from '~/components/logo';
 export default {
+      middleware: 'auth',
     components: {
         login,
         swiper,

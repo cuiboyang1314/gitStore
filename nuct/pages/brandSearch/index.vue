@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-<div class="container">
+<div class="container" v-loading="loading">
     <div class="searchBanner">
         <navbar style="top: 0;"></navbar>
         <login></login>
@@ -52,60 +52,13 @@ import Cookies from '~/plugins/cookie';
 //axios.defaults.baseURL = "http://47.104.148.196:8081/dbblog";
 
 export default {
+    middleware: 'auth',
   data () {
     return {
         input: '',
-        list: [
-            {
-                "id": 1,
-                "name": "歌莉娅",
-                "nameAbbr": "歌莉娅",
-                "nameEn": "GELIYA",
-                "categoryId": "19",
-                "introduction": "歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌",
-                "cover": "http://pvt7whda9.bkt.clouddn.com/brand/20190806/bd374017900b46cb8e7d6ef9ea9cdabc.png",
-                "founder": "歌德",
-                "establishDate": 649868400000,
-                "area": "上海",
-                "createUserId": "7",
-                "createTime": 1566267385000,
-                "categoryListStr": null,
-                "baseSummaryList": null,
-                "tagList": [
-                    {
-                    "id": 13,
-                    "name": "百年传承",
-                    "type": 5
-                    }
-                ],
-                "brdMean": null,
-                "brdQualityRatio": null,
-                "brdStability": null
-            },
-            {
-                "id": 2,
-                "name": "耐克",
-                "nameAbbr": "耐克",
-                "nameEn": "NIKE",
-                "categoryId": "19",
-                "introduction": "耐克耐克耐克耐克",
-                "cover": "http://pvt7whda9.bkt.clouddn.com/brand/20190806/bd374017900b46cb8e7d6ef9ea9cdabc.png",
-                "founder": "艾克",
-                "establishDate": 649868400000,
-                "area": "上海",
-                "createUserId": "7",
-                "createTime": 1566267385000,
-                "categoryListStr": null,
-                "baseSummaryList": null,
-                "tagList": [],
-                "brdMean": null,
-                "brdQualityRatio": null,
-                "brdStability": null
-            }
-        ],
-
+        list: [],
         factor: ['服装','手机','电脑'],
-        
+        loading: true,
     };
   },
   components: {
@@ -114,30 +67,48 @@ export default {
       navbar,
       search,
   },
-  mounted() {
-      console.log(Cookies.get('token'));
-      const instance = axios.create({
-        withCredentials: true,
-        headers: {
-            'token': Cookies.get('token'),
-        },
-        /*proxy: {
-            "/api": {
-                target: "http://47.104.148.196:8081",
-                ws: true,
-                changeOrigin: true,
-                pathRewrite: {
-                    "^/api": "/"
-                }
-            }
-        }*/
+
+
+    mounted() {
+    axios({
+        url: 'dbblog/portal/brand/brands',
+        method: 'get',
+        params: {
+            'token': Cookies.get('token')
+        }
+    }).then(res => {
+        this.loading = false;
+        this.list = res.data.page.list
+    }).catch(error => {
+
     });
-      instance.get('dbblog/portal/brand/brands').then(res => {
-          console.log(res.data);
-      }).catch(error => {
-        console.log(error);
-    });
-  },
+   },
+
+    
+//     async asyncData() {
+//         //axios.defaults.headers.get['Content-Type'] = 'application/json; charset=utf-8;';
+//     await axios({
+//         url: 'http://47.104.148.196:8081/dbblog/portal/brand/brands',
+//         method: 'get',
+//         params: {
+//             'token': 'f7de26bf1b125a5bc2877b76d364bae9'
+//         }
+//     }).then(res => {
+//         console.log(res.data);
+//         return{
+//             loading: false,
+//             list: res.data.page.list
+//         }
+//     }).catch(error => {
+//         console.log(error)
+//     });
+//    },
+
+    // mounted() {
+    //     //console.log(JSON.parse(localStorage.getItem(token)));
+    //     console.log(this.$store.getters.getToken);
+    //     console.log(Cookies.get('token'));
+    // },
 
   methods: {
       turnDetails (url) {
@@ -215,6 +186,7 @@ export default {
 .conditionP {
     float: left;
     margin-left: 35px;
+    color: #000;
 }
 
 .navFixed {

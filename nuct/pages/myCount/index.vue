@@ -13,21 +13,18 @@
                 <hr>
                 <div id="selfInf">
                     <div class="selfInfFlex1">
-                        <img src="../../static/img/selfInfText.jpg" class="selfInfImg">
+                        <img :src="this.avatar" class="selfInfImg">
                         <a>修改头像</a>
                     </div>
                     <div class="selfInfFlex2">
                         <p>ID：</p>
                         <p style="margin-bottom: 50px">关注：<span>4</span>&nbsp;&nbsp;&nbsp;&nbsp;积分：<span>222</span></p>
                         <a>充值</a>
-                        <p>昵称：<span></span></p>
-                        <p>实名：<span></span></p>
-                        <p>性别：<span></span></p>
-                        <p>生日：<span></span></p>
-                        <p>地区：<span></span></p>
-                        <p>行业：<span></span></p>
-                        <p>职业：<span></span></p>
-                        <p>简介：<span></span></p>
+                        <p>昵称：<span>{{ this.name }}</span></p>
+                        <p>实名：<span>{{ this.nickname }}</span></p>
+                        <p>手机号：<span>{{ this.phone }}</span></p>
+                        <p>邮箱：<span>{{ this.email }}</span></p>
+                        <p>积分：<span>{{ this.points }}</span></p>
                     </div>
                 </div>
             </el-tab-pane>
@@ -49,9 +46,16 @@ import axios from 'axios';
 import Cookies from '~/plugins/cookie';
 
 export default {
+      middleware: 'auth',
   data () {
     return {
-        tabPosition: 'left'
+        tabPosition: 'left',
+        name: '0',
+        nickname: '',
+        phone: '',
+        email: '',
+        avatar: '../../_nuxt/static/img/selfInfText.jpg',
+        points: '',
     };
   },
   components: {
@@ -63,6 +67,27 @@ export default {
 
   methods: {
 
+  },
+
+  mounted() {
+    axios({
+        url: 'dbblog/portal/user/info/7',
+        method: 'get',
+        params: {
+            'token': Cookies.get('token')
+        }
+    }).then(res => {
+        this.name = res.data.user.username;
+        this.nickname = res.data.user.nickname;
+        this.phone = res.data.user.phone;
+        this.email = res.data.user.email;
+        this.avatar = res.data.user.avatar;
+        this.points = res.data.user.points;
+        // Cookies.set('username', res.data.user.nickname);
+        // Cookies.set('points', res.data.user.points);
+    }).catch(error => {
+
+    });
   }
 }
 

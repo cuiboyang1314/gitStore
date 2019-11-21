@@ -9,8 +9,10 @@
                 </div>
         <!-- 登录成功显示的个人栏 -->
                 <div class="user" :class="{loginState: loginState}">
-                    <el-avatar :size="size" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar>
-                    <el-link :underline="false" style="position: relative;top: -8px;left: 5px;" @click="loginOut">退出</el-link>
+                    <span @click="turnURL">
+                        <el-avatar :size="size" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" style="cursor: pointer"></el-avatar>
+                    </span>
+                    <el-link :underline="false" style="position: relative;top: -8px;left: 5px; color: #fff;" @click="loginOut">退出</el-link>
                 </div>
         </div>
         <!-- 点击登录弹出的覆盖层登录界面 -->
@@ -73,7 +75,9 @@ export default {
                 this.hideDiv = false;
             }
         },
-
+        turnURL () {
+          location.href = "../myCount";
+        },
         closeForm () {
             if(this.hideDiv == false) {
                 this.hideDiv = true;
@@ -105,7 +109,23 @@ export default {
                 //console.log(res.data.token);
                 Cookies.set('name', this.form.name, {expires: this.toNextDay()});
                 Cookies.set('token', res.data.token, {expires: this.toNextDay()});
+                // localStorage.setItem("token", JSON.stringify(res.data.token))
+                // console.log(JSON.parse(localStorage.getItem("token")));
+                // this.$store.dispatch("setToken", res.data.token)
                 //console.log(Cookies.get('token'));
+                axios({
+                    url: 'dbblog/portal/user/info/7',
+                    method: 'get',
+                    params: {
+                        'token': Cookies.get('token')
+                    }
+                }).then(res => {
+                    Cookies.set('username', res.data.user.nickname);
+                    Cookies.set('points', res.data.user.points);
+                }).catch(error => {
+
+                });
+                
                 this.$router.push('');
                 setTimeout(() => {
                 window.location.href = '';
@@ -113,6 +133,9 @@ export default {
             }).catch(error => {
                 console.log(error);
             });
+
+
+            
             //console.log(Cookies.get('token'));
         },
 
@@ -122,6 +145,8 @@ export default {
         loginOut () {
         console.log(Cookies.get('token'));
         Cookies.remove('token')
+        Cookies.remove('username')
+        Cookies.remove('points')
         setTimeout(() => {
                 window.location.href = '';
             }, 100);
@@ -149,6 +174,7 @@ export default {
     overflow: hidden;
     //background: #6b2048;
     position: absolute;
+    z-index: 999;
     //top: 35px;
 }
 
@@ -163,7 +189,7 @@ a {
     line-height: 25px;
     right: 0;
     bottom: 0;
-    z-index: 99;
+    //z-index: 99;
 }
 
 .login a {
@@ -226,7 +252,9 @@ a {
 
 .user {
     float: right;
-    margin-right: 20px;
+    margin-right: 65px;
+    //margin-top: 30px;
+    z-index: 99;
 }
 
 .loginState {

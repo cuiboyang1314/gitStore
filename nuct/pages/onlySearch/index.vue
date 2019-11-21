@@ -27,6 +27,7 @@ import axios from 'axios';
 axios.defaults.baseURL = "http://47.104.148.196:8081/dbblog";
 
 export default {
+      middleware: 'auth',
   data () {
     return {
         input: '',

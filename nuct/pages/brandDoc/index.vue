@@ -50,8 +50,8 @@
                     <div class="userPic">
                         <div class="selfPic"></div>
                         <div>
-                            <p style="color: #3399ff;font-size: 18px;">用户</p>
-                            <p style="color: #666;font-size:18px;">积分：<span style="color: red">10</span></p>
+                            <p style="color: #3399ff;font-size: 18px;">{{ this.username }}</p>
+                            <p style="color: #666;font-size:18px;">积分：<span style="color: red">{{ this.points }}</span></p>
                         </div>
                     </div>
                     <p>上传了<span>0</span>个资源</p>
@@ -83,12 +83,15 @@ import Cookies from '~/plugins/cookie';
 //axios.defaults.baseURL = "http://47.104.148.196:8081/dbblog";
 
 export default {
+      middleware: 'auth',
   data () {
     return {
         input: '',
         brandCondition: [],
         show: 'none',
-        input3: '',    
+        input3: '',
+        username: Cookies.get('username'),
+        points: Cookies.get('points'),       
     };
   },
   components: {
@@ -98,6 +101,7 @@ export default {
       search,
   },
   mounted() {
+      console.log(Cookies.get('username'));
   },
 
   methods: {

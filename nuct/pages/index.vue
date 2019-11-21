@@ -78,6 +78,9 @@ import swiper from '~/components/carousel';
 import navbar from '~/components/nav';
 import footerBar from '~/components/footer';
 import logo from '~/components/logo';
+import axios from 'axios';
+import Cookies from '~/plugins/cookie';
+
 export default {
     components: {
         login,
@@ -88,7 +91,12 @@ export default {
     },
     methods: {
         jumpUrl (url) {
-            location.href = url;
+            if(Cookies.get('token') == null) {
+                this.$message('请先登录'); 
+            }else{
+                location.href = url;
+            }
+            
         }
     }
 }

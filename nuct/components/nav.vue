@@ -31,7 +31,7 @@ export default {
         top: 83px;
         right: 185px;
         height: 40px;
-        z-index: 1;
+        z-index: 9999;
         width: 600px;
         height: 40px;
     }
