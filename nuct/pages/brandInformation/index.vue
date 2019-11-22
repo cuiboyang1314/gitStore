@@ -11,7 +11,7 @@
         <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item :to="{ path: '/brandSearch'}">品牌列表</el-breadcrumb-item>
-            <el-breadcrumb-item>{{ this.$route.query.mallCode }}</el-breadcrumb-item>
+            <el-breadcrumb-item>{{ this.$route.query.name }}</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="brandInformation">
             <h6><span class="hStyle"></span>品牌基础数据和基础指标汇总</h6>
@@ -121,7 +121,7 @@ export default {
       let arr2 = [];
       let arr3 = [];
       axios({
-        url: 'dbblog/portal/brand/brand/1',
+        url: 'dbblog/portal/brand/brand/'+this.$route.query.mallCode,
         method: 'get',
         params: {
             'token': Cookies.get('token')

@@ -21,20 +21,25 @@
         <div class="condition">
             <p style="margin-left: 15px; margin-bottom: 20px;"><span style="display: inline-block; width: 9px; height: 15px; background: #6b2049; margin-right: 5px;margin-top: -6px;vertical-align: middle;"></span>筛选条件：</p>
             <div v-for = "(item, i) in factor" :key="i">
-                <a href="" class="conditionP">{{ item }}</a>
+                <a class="conditionP" @click="condition">{{ item.name }}</a>
             </div>
         </div>
         <hr>
         <div class="brand">
-            <div v-for = "(item, i) in list" :key="i" v-if = "i < 9" @click="turnDetails(item.name)"> 
+            <div v-for = "(item, i) in list" :key="i" v-if = "i < 9" @click="turnDetails(1, item.name)"> 
                 <p class="brandTitle">{{ item.name }}</p>
                 <p class="brandIntroduction">{{ item.introduction }}</p>
             </div>
+            <!-- <div v-for = "item in 10"> 
+                <p class="brandTitle"></p>
+                <p class="brandIntroduction"></p>
+            </div> -->
         </div>
         <el-pagination
         background
         layout="prev, pager, next"
-        :total="1000">
+        :total="total"
+        :page-size="size">
         </el-pagination>
     </div>
     <footerBar></footerBar>
@@ -59,6 +64,8 @@ export default {
         list: [],
         factor: ['服装','手机','电脑'],
         loading: true,
+        total: 3,
+        size: 6,
     };
   },
   components: {
@@ -77,8 +84,23 @@ export default {
             'token': Cookies.get('token')
         }
     }).then(res => {
+        //console.log(res.data)
         this.loading = false;
-        this.list = res.data.page.list
+        this.list = res.data.page.list;
+        this.total = res.data.page.totalCount;
+        this.size = res.data.page.pageSize;
+                axios({
+                url: 'dbblog/operation/categories',
+                method: 'get',
+                params: {
+                    'token': Cookies.get('token')
+                }
+            }).then(res => {
+                this.factor = res.data.categoryList
+                
+            }).catch(error => {
+
+            });
     }).catch(error => {
 
     });
@@ -111,17 +133,35 @@ export default {
     // },
 
   methods: {
-      turnDetails (url) {
+      turnDetails (url, name) {
             this.$router.push({
             path: '../brandInformation',
             // name: 'mallList',
             query: {
-                mallCode: url
+                mallCode: url,
+                name: name
             }
         })
       },
       turnOnlySearch () {
           location.href = "../onlySearch";
+      },
+      condition () {
+          axios({
+                url: 'dbblog/portal/brand/brands',
+                method: 'get',
+                params: {
+                    'token': Cookies.get('token'),
+                    'categoryId': 19
+                }
+            }).then(res => {
+                console.log(res.data)
+                this.loading = false;
+                this.list = res.data.page.list
+                
+            }).catch(error => {
+
+            });
       }
   }
 }
@@ -132,7 +172,7 @@ export default {
 .showBrand {
     position: relative;
     //margin-top: 30px;
-    height: 1000px;
+    height: 1300px;
     padding-top: 30px;
 }
 
@@ -186,7 +226,13 @@ export default {
 .conditionP {
     float: left;
     margin-left: 35px;
+    line-height: 30px;
     color: #000;
+    cursor: pointer;
+}
+
+.conditionP:hover {
+    color: #ef8b3b;
 }
 
 .navFixed {
