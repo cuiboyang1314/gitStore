@@ -26,9 +26,9 @@
         </div>
         <hr>
         <div class="brand">
-            <div v-for = "(item, i) in list" :key="i" v-if = "i < 9" @click="turnDetails(1, item.name)"> 
-                <p class="brandTitle">{{ item.name }}</p>
-                <p class="brandIntroduction">{{ item.introduction }}</p>
+            <div v-for = "(item, i) in showList" :key="i" @click="turnDetails(1, item.name)"> 
+                    <p class="brandTitle">{{ item.name }}</p>
+                    <p class="brandIntroduction">{{ item.introduction }}</p>
             </div>
             <!-- <div v-for = "item in 10"> 
                 <p class="brandTitle"></p>
@@ -39,7 +39,9 @@
         background
         layout="prev, pager, next"
         :total="total"
-        :page-size="size">
+        :page-size="size"
+        :current-page="currentPage"
+        @current-change="consoleCurr">
         </el-pagination>
     </div>
     <footerBar></footerBar>
@@ -62,10 +64,14 @@ export default {
     return {
         input: '',
         list: [],
+        totalPage: [],
         factor: ['服装','手机','电脑'],
         loading: true,
         total: 3,
         size: 6,
+        currentPage: 1,
+        pageNum: 0,
+        showList: [],
     };
   },
   components: {
@@ -85,10 +91,17 @@ export default {
         }
     }).then(res => {
         //console.log(res.data)
+        //this.currentPage = res.data.page.currPage;
         this.loading = false;
         this.list = res.data.page.list;
         this.total = res.data.page.totalCount;
         this.size = res.data.page.pageSize;
+        this.pageNum = Math.ceil(this.total / this.size) || 1;
+        for (let i = 0; i < this.pageNum; i++) {
+            this.totalPage[i] = this.list.slice(this.size * i, this.size * (i + 1))
+        }
+        this.showList = this.totalPage[this.currentPage-1];
+        //console.log(this.totalPage);
                 axios({
                 url: 'dbblog/operation/categories',
                 method: 'get',
@@ -106,6 +119,11 @@ export default {
     });
    },
 
+    updated() {
+        // for(let i of this.list) {
+        //     this.showList.push(i);
+        // }
+    },
     
 //     async asyncData() {
 //         //axios.defaults.headers.get['Content-Type'] = 'application/json; charset=utf-8;';
@@ -162,6 +180,12 @@ export default {
             }).catch(error => {
 
             });
+      },
+      consoleCurr (val) {
+          //console.log(`${val}`);
+          this.currentPage = val;
+          this.showList = this.totalPage[this.currentPage-1];
+          //console.log(this.currentPage);
       }
   }
 }
