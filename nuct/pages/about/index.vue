@@ -5,7 +5,11 @@
         <swiper></swiper>
         <navbar></navbar>
         <logo></logo>
-        <div>
+        <div style="padding-top: 10px;">
+        <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>关于我们</el-breadcrumb-item>
+        </el-breadcrumb>
             <p class="brandName">关于我们</p>
             <p class="brandSmallName">About Us</p>
             <p class="arrow">︾</p>

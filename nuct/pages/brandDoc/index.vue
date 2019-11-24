@@ -36,10 +36,10 @@
             </el-tag>
             </div>
             <div class="left">
-            <div>
-                <a class="questionTitle" @click="turnInfor">刷机教程.doc——三星GT-I9070线刷教程</a>
-                <p class="questionInf">想要刷机但是没有尝试过刷机的三星小伙伴们可以参考一下本教程。</p>
-                <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>2019-07-15</span>上传者：
+            <div v-for = "(item, i) in list" :key = "i">
+                <a class="questionTitle" @click="turnInfor">{{ item.title }}</a>
+                <p class="questionInf">{{ item.description }}</p>
+                <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>{{ item.createTime }}</span>上传者：
 
 <span>Mr.Boring</span></p>
                 <hr>
@@ -91,7 +91,8 @@ export default {
         show: 'none',
         input3: '',
         username: Cookies.get('username'),
-        points: Cookies.get('points'),       
+        points: Cookies.get('points'),
+        list: [],      
     };
   },
   components: {
@@ -127,6 +128,19 @@ export default {
         })
       }
 
+  },
+
+  mounted() {
+      axios({
+          url: 'dbblog/portal/information/informations',
+          method: 'get',
+          params: {
+              token: Cookies.get('token')
+          }
+      }).then(res => {
+          console.log(res.data.page.list);
+          this.list = res.data.page.list;
+      });
   },
 
     updated: function () {
