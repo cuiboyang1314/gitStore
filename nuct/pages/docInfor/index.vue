@@ -16,9 +16,9 @@
             </el-breadcrumb>
             <div class="left">
                 <div>
-                    <a class="questionTitle">刷机教程.doc——三星GT-I9070线刷教程</a>
-                    <p class="questionInf">想要刷机但是没有尝试过刷机的三星小伙伴们可以参考一下本教程。</p>
-                    <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>2019-07-15</span></p>
+                    <a class="questionTitle">{{ this.list.title }}</a>
+                    <p class="questionInf">{{ this.list.description }}</p>
+                    <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>{{ this.list.createTime }}</span></p>
                     <span style="margin-right: 150px;">所需积分：5</span>
                     <el-button @click="downLoad">立即下载</el-button>
                     <hr>
@@ -85,7 +85,21 @@ export default {
         input3: '',
         score: '3',
         selfScore: '41',
+        list:'',
+        docId: 1,
     };
+  },
+
+  mounted() {
+      axios({
+          url: 'dbblog/portal/information/information/'+this.docId,
+          method: 'get',
+          params: {
+              token: Cookies.get('token')
+          }
+      }).then(res => {
+          this.list = res.data.brdInformation;
+      });
   },
 
   methods: {

@@ -18,12 +18,12 @@
         <div class="questionList" :style="{ visibility: tabsVisibility.questionList }">
             <div>
                 <div class="question">
-                    <h1>关于使用品牌计算器不能获取结果的问题，求帮助</h1>
-                    <div class="questionContent">ssd</div>
+                    <h1>{{ list.title }}</h1>
+                    <div class="questionContent">{{ list.content }}</div>
                     <br>
-                    <p class="time">编辑于：<span>2019.07.15 20:43</span></p>
+                    <p class="time">编辑于：<span>{{ list.createTime }}</span></p>
                     <br>
-                    <p>浏览<span style="margin-right: 10px">0</span>评论<span>0</span></p>
+                    <p>浏览<span style="margin-right: 10px">{{ list.readNum }}</span>评论<span>{{ topicPoint }}</span></p>
                     <div  style="overflow: hidden;position: relative;">
                         <div class="questionNav">
                             <el-link :underline="false">分享</el-link>
@@ -37,23 +37,32 @@
                 </div>
                 <hr style="border: 0;border-bottom: 2px solid #ccc;">
                 <div>
-                    <p style="font-size: 17px;"><span>0</span>个回答</p>
+                    <p style="font-size: 17px;"><span>{{ topicPoint }}</span>个回答</p>
                     <hr style="border: 0;border-bottom: 1px solid #ccc;">
                     <!--循环此部分-->
-                    <div class="question">
-                        <div class="questionContent">ssd</div>
+                    <div class="question" v-for = "(item, i) in list.brdCommentList" :key = "i">
+                        <div class="questionContent">{{ item.content }}</div>
                         <br>
                         <div  style="overflow: hidden;position: relative;">
                             <div class="questionNav">
-                                <p class="time">编辑于：<span>2019.07.15 20:43</span></p>
+                                <p class="time">编辑于：<span>{{ item.createTime }}</span></p>
+                                <el-link :underline="false" icon="el-icon-s-comment" @click="response(i)">回复<span>（{{ list.brdCommentList[i].brdReplyList.length }}）</span></el-link>
                             </div>
                             <div style="float: right">
                                 <div class="head"></div>
                                 <div class="name">崔博洋cuiboyang</div>
                             </div>
                         </div>
+                        <div  :name="i" ref="card" style="display: none"> 
+                            <el-card class="box-card">
+                                <div v-for="(items, o) in list.brdCommentList[i].brdReplyList" :key="o" class="text item" style="margin-top:10px">
+                                    {{ items.content }}
+                                </div>
+                            </el-card>
+                        </div>
+                        <hr style="border: 0;border-bottom: 1px solid #ccc;">
                     </div>
-                    <hr style="border: 0;border-bottom: 1px solid #ccc;">
+                    
 
                 </div>
                 <div class="quill-editor"
@@ -136,8 +145,26 @@ export default {
 
             ]
           }
-        }
+        },
+        topicId: 1,
+        list: '',
+        topicPoint: '',
+        activeName: '',
     };
+  },
+
+  mounted() {
+      axios({
+          url: 'dbblog/portal/topic/topic/' + this.topicId,
+          method: 'get',
+          params: {
+              token: Cookies.get('token')
+          }
+      }).then(res => {
+          console.log(res.data.brdTopic.brdCommentList[0].brdReplyList);
+          this.list = res.data.brdTopic;
+          this.topicPoint = res.data.brdTopic.brdCommentList.length
+      })
   },
 
   methods: {
@@ -156,6 +183,15 @@ export default {
         onEditorChange (editor) {},
         turnUrl(url) {
           location.href = url;
+      },
+      response(i) {
+          //console.log(this.$refs.card[i]);
+          if(this.$refs.card[i].style.display == 'none'){
+              this.$refs.card[i].style.display = 'block';
+          }else{
+              this.$refs.card[i].style.display = 'none';
+          }
+          
       }
   }
 }
@@ -380,6 +416,7 @@ hr {
 
 .time {
     color: #ccc;
+    margin-bottom: 10px;
 }
 
 .head {

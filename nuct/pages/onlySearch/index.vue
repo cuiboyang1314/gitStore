@@ -1,8 +1,11 @@
 <!-- 单一搜索 -->
 <template>
 <div class="container">
-    <login></login>
-    <!--<navbar></navbar>-->
+    <div class="searchBanner">
+        <navbar style="top: 0;"></navbar>
+        <login></login>
+    </div>
+    <img src="../../static/img/791571927556_.pic.jpg" alt="">
     <search></search>
     <div class="showBrand">
         <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
@@ -57,10 +60,10 @@ export default {
 @import '~assets/less/main.less';
 .showBrand {
     position: relative;
-    background: #f5f5f5;
-    margin-top: 50px;
+    //background: #f5f5f5;
+    //margin-top: 50px;
     height: 1000px;
-    padding-top: 30px;
+    padding-top: 10px;
 }
 
 .Breadcrumb {
@@ -107,5 +110,14 @@ export default {
 .brandIntroduction {
     margin-left: 10px;
     margin-top: 5px;
+}
+
+.searchBanner {
+    background: #6b2049;
+    height: 35px;
+}
+
+.login {
+    bottom: 30px !important;
 }
 </style>

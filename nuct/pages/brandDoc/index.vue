@@ -36,7 +36,7 @@
             </el-tag>
             </div>
             <div class="left">
-            <div v-for = "(item, i) in list" :key = "i">
+            <div v-for = "(item, i) in showList" :key = "i">
                 <a class="questionTitle" @click="turnInfor">{{ item.title }}</a>
                 <p class="questionInf">{{ item.description }}</p>
                 <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>{{ item.createTime }}</span>上传者：
@@ -44,6 +44,14 @@
 <span>Mr.Boring</span></p>
                 <hr>
             </div>
+            <el-pagination
+            background
+            layout="prev, pager, next"
+            :total="total"
+            :page-size="size"
+            :current-page="currentPage"
+            @current-change="consoleCurr">
+            </el-pagination>
             </div>
             <div class="right">
                 <div class="myAnswer">
@@ -92,7 +100,13 @@ export default {
         input3: '',
         username: Cookies.get('username'),
         points: Cookies.get('points'),
-        list: [],      
+        list: [],    
+        total: 3,
+        size: 6,
+        currentPage: 1,
+        pageNum: 0,  
+        totalPage: [],
+        showList: [],
     };
   },
   components: {
@@ -126,6 +140,12 @@ export default {
                 mallCode: url
             }*/
         })
+      },
+        consoleCurr (val) {
+          //console.log(`${val}`);
+          this.currentPage = val;
+          this.showList = this.totalPage[this.currentPage-1];
+          //console.log(this.currentPage);
       }
 
   },
@@ -138,8 +158,16 @@ export default {
               token: Cookies.get('token')
           }
       }).then(res => {
-          console.log(res.data.page.list);
-          this.list = res.data.page.list;
+            console.log(res.data.page);
+            this.total = res.data.page.totalCount;
+            this.size = res.data.page.pageSize;
+            this.list = res.data.page.list;
+            this.pageNum = Math.ceil(this.total / this.size) || 1;
+            for (let i = 0; i < this.pageNum; i++) {
+                this.totalPage[i] = this.list.slice(this.size * i, this.size * (i + 1))
+            }
+            this.showList = this.totalPage[this.currentPage-1];
+
       });
   },
 
@@ -204,6 +232,7 @@ hr {
     width: 700px;
     height: 800px;
     background: #fff;
+    position: relative;
 }
 
 .right {
@@ -307,5 +336,12 @@ hr {
 
 .login {
     bottom: 30px !important;
+}
+
+.el-pagination {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 50px;
 }
 </style>

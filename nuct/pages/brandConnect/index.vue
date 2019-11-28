@@ -16,37 +16,30 @@
         </el-menu>
         <!-- <el-input class="questionSearch" v-model="input" placeholder="问题搜索"></el-input> -->
         <div class="questionList" :style="{ visibility: tabsVisibility.questionList }">
-            <div>
+            <div v-for = "(item, i) in showList" :key = "i">
                 <div class="answerNamber">
                     <p>5</p>
                     <p>回答</p>
                 </div>
-                <p class="questionTime">2019.07.15 20:25来自 qq_17642463</p>
-                <a class="questionTitle" @click="turnUrl('/brandAnswer')">关于使用品牌计算器不能获取结果的问题，求帮助</a>
-                <p class="questionInf">如图所示，通过品牌计算器得不到正确的返回结果，找了半天都没找到相关办法，求各位大佬</p>
+                <p class="questionTime"><span>{{ item.createTime }}</span>来自 qq_17642463</p>
+                <a class="questionTitle" @click="turnUrl('/brandAnswer')">{{ item.title }}</a>
+                <p class="questionInf">{{ item.description }}</p>
                 <div class="showData">
-                    <p>浏览<span>16</span></p>
-                    <p>收藏<span>0</span></p>
-                    <p>同问<span>0</span></p>
-                </div>
-                <hr>
-            </div>
-            <div>
-                <div class="answerNamber">
-                    <p>5</p>
-                    <p>回答</p>
-                </div>
-                <p class="questionTime">2019.07.15 20:25来自 qq_17642463</p>
-                <a class="questionTitle" @click="turnUrl('/brandAnswer')">关于使用品牌计算器不能获取结果的问题，求帮助</a>
-                <p class="questionInf">如图所示，通过品牌计算器得不到正确的返回结果，找了半天都没找到相关办法，求各位大佬</p>
-                <div class="showData">
-                    <p>浏览<span>16</span></p>
+                    <p>浏览<span>{{ item.readNum }}</span></p>
                     <p>收藏<span>0</span></p>
                     <p>同问<span>0</span></p>
                 </div>
                 <hr>
             </div>
         </div>
+        <el-pagination
+            background
+            layout="prev, pager, next"
+            :total="total"
+            :page-size="size"
+            :current-page="currentPage"
+            @current-change="consoleCurr">
+        </el-pagination>
         <div class="questionRightBar">
             <el-button type="primary" @click="turnUrl('/askQuestion')" style="width: 100%; border-radius: 0px; background: #6b2049; border: 1px solid #6b2049;">我要提问</el-button>
             <div class="myAnswer">
@@ -110,19 +103,54 @@ export default {
         tabsVisibility: {
             questionList: '',
         },
+        list: [],
+        total: 3,
+        size: 6,
+        currentPage: 1,
+        pageNum: 0,  
+        totalPage: [],
+        showList: [],
     };
   },
 
+  mounted() {
+      axios({
+          url: 'dbblog/portal/topic/topics',
+          method: 'get',
+          params: {
+              token: Cookies.get('token')
+          }
+      }).then(res => {
+        console.log(res.data.page);
+        this.list = res.data.page.list;
+        this.total = res.data.page.totalCount;
+        this.size = res.data.page.pageSize;
+        this.pageNum = Math.ceil(this.total / this.size) || 1;
+        for (let i = 0; i < this.pageNum; i++) {
+                this.totalPage[i] = this.list.slice(this.size * i, this.size * (i + 1))
+        }
+        this.showList = this.totalPage[this.currentPage-1];
+
+      })
+  },
+
   methods: {
-      tabs(xx) {
+    tabs(xx) {
           for ( let vib in this.$data.tabsVisibility) {
               this.$data.tabsVisibility[vib] = 'hidden';
           }
           this.$data.tabsVisibility[xx] = '';
       },
 
-      turnUrl(url) {
+    turnUrl(url) {
           location.href = url;
+      },
+
+    consoleCurr (val) {
+          //console.log(`${val}`);
+          this.currentPage = val;
+          this.showList = this.totalPage[this.currentPage-1];
+          //console.log(this.currentPage);
       }
   }
 }
@@ -163,6 +191,7 @@ export default {
     padding-top: 20px;
     padding-left: 20px;
     min-height: 300px;
+    height: 100%;
     width: 700px;
     float: left;
     background: #fff;
@@ -347,5 +376,12 @@ hr {
 
 .login {
     bottom: 30px !important;
+}
+
+.el-pagination {
+    position: absolute;
+    left: 30%;
+    transform: translateX(-50%);
+    bottom: 350px;
 }
 </style>
