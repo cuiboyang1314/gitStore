@@ -91,42 +91,49 @@ export default {
   },
 
   mounted() {
+      //console.log(this.$route.query.mallCode)
       axios({
-          url: 'dbblog/portal/information/information/'+this.docId,
+          url: 'dbblog/portal/information/information/'+this.$route.query.mallCode,
           method: 'get',
           params: {
               token: Cookies.get('token')
           }
       }).then(res => {
+          console.log(res.data);
           this.list = res.data.brdInformation;
       });
   },
 
   methods: {
       downLoad() {
-        const h = this.$createElement;
-        this.$msgbox({
-            title: '下载确认',
-            message: h('p', null, [
-                h('span', null, '是否确认下载? '),
-                h('br', null, ''),
-                h('span', null, '所需积分： '),
-                h('i', { style: 'color: teal' }, this.score),
-                h('br', null, ''),
-                h('span', null, '剩余积分： '),
-                h('i', { style: 'color: teal' }, this.selfScore)
-            ]),
-            showCancelButton: true,
-            dangerouslyUseHTMLString: true,
-            confirmButtonText: '确定下载',
-            cancelButtonText: '取消下载',
-            type: 'warning'
-        }).catch(() => {
-            this.$message({
-                type: 'info',
-                message: '已取消下载'
-          });          
-        });
+        // const h = this.$createElement;
+        // this.$msgbox({
+        //     title: '下载确认',
+        //     message: h('p', null, [
+        //         h('span', null, '是否确认下载? '),
+        //         h('br', null, ''),
+        //         h('span', null, '所需积分： '),
+        //         h('i', { style: 'color: teal' }, this.score),
+        //         h('br', null, ''),
+        //         h('span', null, '剩余积分： '),
+        //         h('i', { style: 'color: teal' }, this.selfScore)
+        //     ]),
+        //     showCancelButton: true,
+        //     dangerouslyUseHTMLString: true,
+        //     confirmButtonText: '确定下载',
+        //     cancelButtonText: '取消下载',
+        //     type: 'warning'
+        // }).catch(() => {
+        //     this.$message({
+        //         type: 'info',
+        //         message: '已取消下载'
+        //   });          
+        // });
+
+        axios({
+            url: 'http://47.104.148.196:8081/dbblog/portal/file//downloadFile',
+            method: 'post',
+        })
       }
     }
 }

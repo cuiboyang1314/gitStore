@@ -15,7 +15,8 @@
             <p class="arrow">︾</p>
         </div>
         <div class="friend">
-            <p>给第三方第三方士大夫随风都随风胜多负少的发斯蒂芬斯蒂芬斯蒂芬的防守打法水电费是打发顺丰胜多负少的方式防守打法</p>
+            <img src="../../static/img/about.png" alt="" style="margin: 0 auto;">
+            <p style="text-align: center;">给第三方第三方士大夫随风都随风胜多负少的发斯蒂芬斯蒂芬斯蒂芬的防守打法水电费是打发顺丰胜多负少的方式防守打法</p>
         </div>        
         <footerBar style="width: 1080px;position: absolute; bottom: 0;"></footerBar>
     </div>

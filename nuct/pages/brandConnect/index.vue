@@ -49,7 +49,7 @@
                     <div class="selfPic"></div>
                     <div>
                         <p style="color: #3399ff;font-size: 18px;">用户</p>
-                        <p style="color: #666;font-size:18px;">积分：<span style="color: red">10</span></p>
+                        <p style="color: #666;font-size:18px;">积分：<span style="color: red">{{ userPoint }}</span></p>
                     </div>
                 </div>
                 <p>提了<span>0</span>个问题，<span>0</span>人进行了回答</p>
@@ -60,6 +60,9 @@
                 <p class="hotNoteTitle">热门标签</p>
                 <a href="" class="hotNoteMore">更多</a>
                 <hr>
+                <el-tag v-for="(item,index) in hotTag" :key="index">
+                    {{ item.name }}
+                </el-tag>
             </div>
             <div class="newResponse">
                 <p class="newResponseTitle">最新回答</p>
@@ -110,12 +113,14 @@ export default {
         pageNum: 0,  
         totalPage: [],
         showList: [],
+        hotTag: [],
+        userPoint: Cookies.get('points'),
     };
   },
 
   mounted() {
       axios({
-          url: 'dbblog/portal/topic/topics',
+          url: 'http://47.104.148.196:8081/dbblog/portal/topic/topics',
           method: 'get',
           params: {
               token: Cookies.get('token')
@@ -132,6 +137,18 @@ export default {
         this.showList = this.totalPage[this.currentPage-1];
 
       })
+
+    axios({
+          url: 'dbblog/portal/operation/tags/3',
+          method: 'get',
+          params: {
+            token: Cookies.get('token'),
+          }
+      }).then(res => {
+          this.hotTag = res.data.tagList;
+          //console.log(this.hotTag);
+      })
+
   },
 
   methods: {

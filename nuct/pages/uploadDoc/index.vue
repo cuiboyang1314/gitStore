@@ -17,36 +17,104 @@
             <el-form ref="form" :model="form" label-width="80px" style="width: 500px;margin: 0 auto;">
                 <el-upload
                     class="upload-demo"
-                    action="https://jsonplaceholder.typicode.com/posts/"
+                    
+                    ref="upload"
+                    action=""
+                    :data="uploadData"
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
+                    :on-error="handleError"
+                    :on-success="handleSuccess"
                     :before-remove="beforeRemove"
+                    :before-upload="beforeUpload"
                     multiple
-                    :limit="3"
-                    :on-exceed="handleExceed">
+                    :limit="1"
+                    :on-exceed="handleExceed"
+                    
+                    :auto-upload="false">
                     <el-button size="small" type="primary">点击上传</el-button>
                     <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                 </el-upload>
                 <el-form-item label="资源名称">
-                    <el-input v-model="form.name"></el-input>
-                </el-form-item>
-                <el-form-item label="资源类型">
-                    <el-input v-model="form.type"></el-input>
+                    <el-input v-model="form.name" name="fileName"></el-input>
                 </el-form-item>
                 <el-form-item label="资源分类">
-                    <el-input v-model="form.sort"></el-input>
+                    <el-select v-model="form.type" placeholder="请选择">
+                        <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="资源积分">
+                    <el-input-number v-model="form.point" :min="1"></el-input-number>
+                </el-form-item>
+                <el-form-item label="资源标签">
+                    <!-- <el-tag
+                        :key="tag"
+                        v-for="tag in form.label"
+                        closable
+                        :disable-transitions="false"
+                        @close="handleClose(tag)">
+                        {{tag}}
+                    </el-tag> -->
+                    <el-tag
+                    type="success"
+                    :key="index"
+                    v-for="(tag,index) in form.label"
+                    style="margin-right: 10px"
+                    >{{ tag.name }}</el-tag>  
+                    <el-button type="text" @click="dialogVisible = true">点击新增标签（最多5个）</el-button>
                 </el-form-item>
                 <el-form-item label="资源描述">
-                    <el-input type="textarea" style="width: 100%;resize: none;" v-model="form.describe"></el-input>
+                    <el-input type="textarea" style="width: 100%;resize: none;" v-model="form.describe" name="fileDescribe"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-checkbox v-model="checked">同意&nbsp;&nbsp;&nbsp;品牌研究资源共享规则</el-checkbox>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" :disabled="isAbled">立即提交</el-button>
+                    <el-button type="primary" :disabled="isAbled" @click="formSubmit">立即提交</el-button>
                 </el-form-item>
             </el-form>
         </div>
+        <el-dialog
+            title="新增标签"
+            :visible.sync="dialogVisible"
+            width="30%"
+            :before-close="DigHandleClose">
+            <span>新增的标签是：</span>
+            <span>
+                <el-tag
+                    v-for="(tag,index) in form.label"
+                    :key="index"
+                    closable
+                    :disable-transitions="false"
+                    @close="handleClose(tag.name)">
+                    {{tag.name}}
+                </el-tag>
+            </span>
+            <span>
+                <el-input
+                v-model="labelValue"
+                @keyup.enter.native="handleInputConfirm"
+                @blur="handleInputConfirm"
+                ></el-input>
+            </span>
+            <span>
+                <el-tag
+                v-for="(item,index) in hotTag"
+                :key="index"
+                effect="dark"
+                style="margin: 5px 5px 0px 0px"
+                @click="addTag(item.name)"
+                >{{ item.name }}</el-tag>
+            </span>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
       </div>
       <footerBar></footerBar>
   </div>
@@ -59,18 +127,30 @@ import footerBar from '~/components/footer';
 import search from '~/components/searchInput';
 import axios from 'axios';
 import Cookies from '~/plugins/cookie';
+
+// axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 export default {
       middleware: 'auth',
   data () {
     return {
         checked: false,
         isAbled: true,
+        dialogVisible: false,
         form: {
             name: '',
             type: '',
-            sort: '',
+            point: '',
             describe: '',
-        }
+            label: [],
+        },
+        options: [],
+        labelValue: '',
+        hotTag: [],
+        sourceID: '',
+        uploadData: {
+            'token': Cookies.get('token')
+        },
+        //fileList: [],
     };
   },
   components: {
@@ -80,31 +160,177 @@ export default {
       search,
   },
 
+  mounted() {
+      axios({
+          url: 'dbblog/portal/operation/categories',
+          method: 'get',
+          params: {
+              token: Cookies.get('token'),
+          }
+      }).then(res => {
+        // console.log(res.data.categoryList);
+        this.options = res.data.categoryList;
+        //console.log(this.options);
+
+      });
+
+      axios({
+          url: 'http://47.104.148.196:8081/dbblog/portal/operation/tags/3',
+          method: 'get',
+          params: {
+            token: Cookies.get('token'),
+          }
+      }).then(res => {
+          this.hotTag = res.data.tagList;
+          //console.log(this.hotTag);
+      })
+  },
+
   methods: {
       handleRemove(file) {
         console.log(file);
+      },
+      handleClose(tag) {
+        this.form.label.splice(this.form.label.indexOf(tag), 1);
       },
       handlePreview(file) {
         console.log(file);
       },
       handleExceed(files) {
-        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length} 个文件`);
+        this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length} 个文件`);
       },
       beforeRemove(file) {
         return this.$confirm(`确定移除 ${ file.name }？`);
-      }
-        /*beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
+      },
+      handleError(err, file) {
+          console.log(err);
+      },
+      formSubmit() {
+          this.$refs.upload.submit();
+          console.log(this.form.type);
+          axios({
+              url: 'dbblog/portal/information/save',
+              method: 'post',
+              params:{
+                  token: Cookies.get('token'),
+              },
+              data: {
+                  'title': this.form.name,
+                  'description': this.form.describe,
+                  'categoryId': this.form.type,
+                  'resourceId': this.sourceID,
+                  'recommend': true,
+                  'createUserId': 7,
+                  'tagList': this.form.label
+              }
+          }).then(res => {
+              console.log(res.data);
+          })
+    //     axios.post('dbblog/portal/information/save',{
+    //         token: Cookies.get('token'),
+    //         'title': this.form.name,
+    //         'description': this.form.describe,
+    //         'categoryId': this.form.type,
+    //         'resourceId': this.sourceID,
+    //         'recommend': true,
+    //         'createUserId': 7,
+    //         'tagList': this.form.label,
+    //         // 'token': Cookies.get('token'),
+    //     }).then(res => {
+    //         console.log(res.data);
+    //    })
+      },
+      fileSubmit(params) {
+        console.log(params)
+      },
+      beforeUpload(file) {
+        //this.fileList.push(file)
+        //console.log(this.fileList);
+        var params = new FormData();
+        params.append('file', file);
+        params.append('token',Cookies.get('token'));
+        //console.log(params.get('file'))
+        axios.post('dbblog/portal/file/uploadFile',params).then(res => {
+            console.log(res.data);
+            this.sourceID = res.data.id;
+            console.log(this.sourceID);
+        })
+         return true
+      },
+      handleSuccess(response, file) {
+          axios({
 
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
+          })
+          //console.log(this.fileList);
+          //console.log(response);
+      },
+      handleInputConfirm() {
+        let obj = {};
+        let s = new Set();
+        let inputValue = this.labelValue;
+        if (inputValue) {
+          if (this.form.label.length >= 5) {
+              this.$message('最多5个标签'); 
+              this.form.label.length = 5;
+              this.labelValue = '';
+              return;
+          }
+
+        for(var i = 0; i < this.form.label.length; i++){
+            if(this.form.label[i].name == inputValue){
+                this.labelValue = '';
+                return
+            }
         }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!');
+
+        obj["name"] = inputValue;
+        obj["type"] = 3;
+        this.form.label.push(obj);
+        console.log(this.form.label);
+        //   this.form.label.push(inputValue);
         }
-        return isJPG && isLt2M;
-      }*/
+
+        // this.form.label.forEach(element => s.add(element));
+        // s = [...s];
+        // this.form.label.splice(0, this.form.label.length);
+        // for(let j = 0; j < s.length; j++){
+        //     this.form.label.push(s[j]);
+        // }
+
+        this.labelValue = '';
+      },
+        addTag(xx) {
+        let obj = {};
+        let s = new Set();
+        if (xx) {
+          if (this.form.label.length >= 5) {
+              this.$message('最多5个标签'); 
+              this.form.label.length = 5;
+              return;
+          }
+
+        for(var i = 0; i < this.form.label.length; i++){
+            if(this.form.label[i].name == xx){
+                return
+            }
+        }
+
+        obj["name"] = xx;
+        obj["type"] = 4;
+        this.form.label.push(obj);
+        console.log(this.form.label);
+        //   this.form.label.push(inputValue);
+        }
+
+    },
+
+        DigHandleClose(done) {
+            this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+        },
   },
 
   updated: function () {

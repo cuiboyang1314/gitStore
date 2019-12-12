@@ -106,7 +106,8 @@ export default {
                 url: 'dbblog/operation/categories',
                 method: 'get',
                 params: {
-                    'token': Cookies.get('token')
+                    'token': Cookies.get('token'),
+                    'type': 5,
                 }
             }).then(res => {
                 this.factor = res.data.categoryList

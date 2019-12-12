@@ -15,7 +15,7 @@
             </div>
             <div style="margin-bottom: 10px;">
                 <span style="display: inline-block; width: 9px; height: 15px; background: #6b2049; margin-right: 5px;margin-top: -6px;vertical-align: middle;"></span>
-                领域：<span>全部</span><span @click="tran">领域1</span><span @click="tran">领域2</span><span @click="tran">领域3</span>
+                领域：<span @click="tran">全部</span><span @click="tran" v-for="(item, i) in factor" :key="i">{{ item.name }}</span>
             </div>
             <div>
                 <span style="display: inline-block; width: 9px; height: 15px; background: #6b2049; margin-right: 5px;margin-top: -6px;vertical-align: middle;"></span>
@@ -37,7 +37,7 @@
             </div>
             <div class="left">
             <div v-for = "(item, i) in showList" :key = "i">
-                <a class="questionTitle" @click="turnInfor">{{ item.title }}</a>
+                <a class="questionTitle" @click="turnInfor(item.id)">{{ item.title }}</a>
                 <p class="questionInf">{{ item.description }}</p>
                 <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>{{ item.createTime }}</span>上传者：
 
@@ -95,6 +95,7 @@ export default {
   data () {
     return {
         input: '',
+        factor: [],
         brandCondition: [],
         show: 'none',
         input3: '',
@@ -115,13 +116,27 @@ export default {
       navbar,
       search,
   },
-  mounted() {
-      console.log(Cookies.get('username'));
-  },
+//   mounted() {
+//       console.log(Cookies.get('username'));
+//   },
 
   methods: {
     tran (e) {
-          this.brandCondition.push(e.target.innerText);
+        let s = new Set();
+        if(e.target.innerText == '全部') {
+            for(let i = 0; i < this.factor.length; i++){
+                this.brandCondition.push(this.factor[i].name);
+            }
+        }else {
+            this.brandCondition.push(e.target.innerText);
+        }
+        
+        this.brandCondition.forEach(element => s.add(element));
+        s = [...s];
+        this.brandCondition.splice(0, this.brandCondition.length);
+        for(let j = 0; j < s.length; j++){
+            this.brandCondition.push(s[j]);
+        }
       },
 
     tagClose (tag) {
@@ -132,13 +147,13 @@ export default {
           location.href = "/uploadDoc";
       },
 
-    turnInfor () {
+    turnInfor (url) {
             this.$router.push({
             path: '../docInfor',
-            // name: 'mallList',
-            /*query: {
+            //name: 'mallList',
+            query: {
                 mallCode: url
-            }*/
+            }
         })
       },
         consoleCurr (val) {
@@ -158,7 +173,7 @@ export default {
               token: Cookies.get('token')
           }
       }).then(res => {
-            console.log(res.data.page);
+            console.log(res.data);
             this.total = res.data.page.totalCount;
             this.size = res.data.page.pageSize;
             this.list = res.data.page.list;
@@ -167,9 +182,23 @@ export default {
                 this.totalPage[i] = this.list.slice(this.size * i, this.size * (i + 1))
             }
             this.showList = this.totalPage[this.currentPage-1];
-
+            //console.log(this.list)
       });
-  },
+
+        axios({
+            url: 'dbblog/operation/categories',
+            method: 'get',
+            params: {
+                'token': Cookies.get('token'),
+                'type': 3,
+            }
+        }).then(res => {
+            this.factor = res.data.categoryList
+                
+        }).catch(error => {
+
+        });
+    },
 
     updated: function () {
       if(this.brandCondition !== ''){

@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+import Cookies from '~/plugins/cookie';
 export default {
     name: 'search',
   data () {
@@ -72,21 +74,55 @@ export default {
 
   methods: {
     getBrandList() {
-      this.$store.commit('setList', {
-        list: this.$data.list
-      });
-      for(const i in this.$store.getters.getList){
-      console.log(this.$store.getters.getList[i].name);
-      }
+    //   // this.$store.commit('setList', {
+    //   //   list: this.$data.list
+    //   // });
+    //   // for(const i in this.$store.getters.getList){
+    //   // console.log(this.$store.getters.getList[i].name);
+    //   // }
     this.$router.push({
         path: '../onlySearch',
             // name: 'mallList',
         /*query: {
             mallCode: 
         }*/
-    })
-      //console.log(this.select);
-      //console.log(this.input5);
+    });
+
+    if( this.select == "品牌") {
+        axios({
+            url: 'http://47.104.148.196:8081/dbblog/portal/search/brands/search',
+            methods: 'get',
+            params: {
+                keywords: this.input5,
+                token: Cookies.get('token'),
+            }
+        }).then(res => {
+            console.log(res.data);
+        });
+    }else if (this.select == "资料") {
+        axios({
+            url: 'http://172.18.133.7:8080/dbblog/informations/search',
+            methods: 'get',
+            params: {
+                keywords: this.input5,
+                token: Cookies.get('token'),
+            }
+        }).then(res => {
+            console.log(res.data);
+        });
+    }else if (this.select == "话题") {
+        axios({
+            url: 'http://172.18.133.7:8080/dbblog/topics/search',
+            methods: 'get',
+            params: {
+                keywords: this.input5,
+                token: Cookies.get('token'),
+            }
+        }).then(res => {
+            console.log(res.data);
+        });
+    }
+
     },
   },
 }

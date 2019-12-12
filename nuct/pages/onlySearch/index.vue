@@ -43,15 +43,15 @@ export default {
       search,
   },
   mounted() {
-      axios.get('/brands/search',{
-          params: {
-              keywords: 'http',
-          }
-      }).then(res => {
-          console.log(res.data);
-      }).catch(error => {
-        console.log(error);
-    });
+    //   axios.get('/brands/search',{
+    //       params: {
+    //           keywords: 'http',
+    //       }
+    //   }).then(res => {
+    //       console.log(res.data);
+    //   }).catch(error => {
+    //     console.log(error);
+    // });
   }
 }
 
